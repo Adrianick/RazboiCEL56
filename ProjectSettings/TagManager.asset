@@ -4,11 +4,17 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Score1
-  - Score2
+  - Pachet1
+  - Pachet2
+  - Carte1
+  - Carte2
   - GameManager
-  - Card1
-  - Card2
+  - Carti1
+  - Carti2
+  - Scor1
+  - Scor2
+  - ValoareCarte1
+  - ValoareCarte2
   layers:
   - Default
   - TransparentFX
