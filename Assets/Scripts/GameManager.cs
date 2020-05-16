@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     private Queue<int> cartiCastigate = new Queue<int>();
 
     private bool JocTerminat = false;
+    public int ModJoc = 0;
+    private int CateRundeDeRazboiMare = 0;
 
     public Text valoareCarte1;
     public Text valoareCarte2;
@@ -34,21 +36,32 @@ public class GameManager : MonoBehaviour
 
     public CarteJoc[] cartiJoc = new CarteJoc[52];
 
+    private Button buttonMod;
+
     void Start()
     {
 
         AmestecPachet();
         ImpartirePachet();
 
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (JocTerminat == false && Input.GetKeyDown("space"))
+
+        if (JocTerminat == false && Input.GetKeyDown("space") && CateRundeDeRazboiMare == 0)
         {
             Joc();
+        }
+        else if (CateRundeDeRazboiMare > 0)
+        {
+            if (Input.GetKeyDown("space"))
+            {
+                print("Runde Razboi mare ramase:" + CateRundeDeRazboiMare);
+                ORundaDeRazboiMare();
+                CateRundeDeRazboiMare--;
+            }
         }
     }
 
@@ -117,21 +130,26 @@ public class GameManager : MonoBehaviour
         if (carte1 == carte2)
         {
             // RAZBOI MARE
-            print("Razboi Mare:" + carte1);
-            bool razboiMare = RazboiMare(carte1);
+            print("Razboi Mare:" + carte1 + " vs " + carte1);
 
-            if (razboiMare == true)
-            {
-                return;
-            }
+            CateRundeDeRazboiMare = carte1 - 1;
+
+
+
+            //bool razboiMare = RazboiMare(carte1);
+
+            //if (razboiMare == true)
+            //{
+            //    return;
+            //}
         }
         else
         {
             // RAZBOI MIC
-            print("Razboi Mic:" + carte1 + " vs " + carte2);
+            //print("Razboi Mic:" + carte1 + " vs " + carte2);
             if (carte1 > carte2)
             {
-                AmestecareCarti(1);
+                AmestecareCartiCastigate(1);
                 if (cartiJucator2.Count == 0)
                 {
                     Sfarsit(1);
@@ -140,13 +158,32 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                AmestecareCarti(2);
+                AmestecareCartiCastigate(2);
                 if (cartiJucator1.Count == 0)
                 {
                     Sfarsit(2);
                     return;
                 }
             }
+        }
+    }
+
+    void ORundaDeRazboiMare()
+    {
+        cartiCastigate.Enqueue(cartiJucator1.Dequeue());
+        cartiCastigate.Enqueue(cartiJucator2.Dequeue());
+
+        if (cartiJucator1.Count == 0)
+        {
+            AmestecareCartiCastigate(2);
+            Sfarsit(2);
+            return;
+        }
+        else if (cartiJucator2.Count == 0)
+        {
+            AmestecareCartiCastigate(1);
+            Sfarsit(1);
+            return;
         }
     }
 
@@ -160,7 +197,7 @@ public class GameManager : MonoBehaviour
                 cartiCastigate.Enqueue(cartiJucator1.Dequeue());
                 cartiCastigate.Enqueue(cartiJucator2.Dequeue());
             }
-            AmestecareCarti(2);
+            AmestecareCartiCastigate(2);
 
             Sfarsit(2);
             return true;
@@ -172,13 +209,13 @@ public class GameManager : MonoBehaviour
                 cartiCastigate.Enqueue(cartiJucator1.Dequeue());
                 cartiCastigate.Enqueue(cartiJucator2.Dequeue());
             }
-            AmestecareCarti(1);
+            AmestecareCartiCastigate(1);
 
             Sfarsit(1);
             return true;
         }
 
-        // se mai scot X carti, unde X = carte1, se compara ultimele doua intre ele 
+        // se mai scot X - 1 carti, unde X = carte1, se compara ultimele doua intre ele 
 
         for (int i = 0; i < numarCartiDeRazboi - 1; i++)
         {
@@ -191,7 +228,7 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    void AmestecareCarti(int castigator)
+    void AmestecareCartiCastigate(int castigator)
     {
         //amestecam
         int[] cartiPeMasa = new int[cartiCastigate.Count];
@@ -231,6 +268,8 @@ public class GameManager : MonoBehaviour
 
         numarCarti1.text = cartiJucator1.Count.ToString();
         numarCarti2.text = cartiJucator2.Count.ToString();
+
+        print("Am amestecat cartile si le-am dat jucatorului: " + castigator);
     }
 
     void Sfarsit(int castigator)

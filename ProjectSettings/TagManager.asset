@@ -15,6 +15,7 @@ TagManager:
   - Scor2
   - ValoareCarte1
   - ValoareCarte2
+  - ModJoc
   layers:
   - Default
   - TransparentFX
