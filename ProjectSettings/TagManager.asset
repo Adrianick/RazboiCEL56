@@ -16,6 +16,8 @@ TagManager:
   - ValoareCarte1
   - ValoareCarte2
   - ModJoc
+  - TextRazboi
+  - BlankLeftCard
   layers:
   - Default
   - TransparentFX

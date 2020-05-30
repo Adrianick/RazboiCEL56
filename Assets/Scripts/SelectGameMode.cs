@@ -24,6 +24,6 @@ public class SelectGameMode : MonoBehaviour
     public void SetMode()
     {
 
-        gm.ModJoc = 1;
+        gm.modJoc = 1;
     }
 }
